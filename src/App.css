@@ -46,3 +46,24 @@
 .mar{
   margin-bottom: 3%;
 }
+.alert{
+  margin-left: 3%;
+  padding-left: 2%;
+  padding-top: 0.5%;
+}
+.hide{
+  display: none
+}
+.btn{
+  margin-right: 2%;
+}
+.row{
+  width: 100%;
+}
+footer{
+  background-color: aliceblue;
+  padding: 2%;
+}
+footer a:hover{
+  text-decoration: none;
+}
