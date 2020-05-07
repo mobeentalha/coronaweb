@@ -1,11 +1,14 @@
 import React, { Component } from "react";
+import ReactTooltip from "react-tooltip";
 import axios from "axios";
 import "./App.css";
 import Logo from "./logo.png";
 import Countries from "./countries.js";
-
+import MapChart from "./map";
 class App extends Component {
-  state = {
+  constructor(props) {
+    super(props);
+    this.state = {
     data: [],
     confirmedCases: "",
     recoveredCases: "",
@@ -14,7 +17,11 @@ class App extends Component {
     recoveredRate: "",
     deathRate: "",
     loading: true,
+    content: "",
+    setContent: "",
   };
+  this.setTooltipContent = this.setTooltipContent.bind(this);
+}
   componentDidMount() {
     axios.get(`https://covid19.mathdro.id/api/countries`).then((res) => {
       const cID = res.data.countries;
@@ -39,6 +46,9 @@ class App extends Component {
   roundValue(num) {
     return +(Math.round(num + "e+2") + "e-2");
   }
+  setTooltipContent(value){
+    this.setState({content: value})
+  }
   render() {
     return (
       <section>
@@ -52,31 +62,12 @@ class App extends Component {
         </div>
         <section className="content">
           <div className="container">
-          <h2> About Corona Virus</h2>
-          <p>
-            Coronavirus disease (COVID-19) is an infectious disease caused by a new virus.
-            The disease causes respiratory illness (like the flu) with symptoms such as a cough, fever, and in more severe cases, difficulty breathing. You can protect yourself by washing your hands frequently, avoiding touching your face, and avoiding close contact (1 meter or 3 feet) with people who are unwell.
-          </p>
-          <h2> How it Spreads</h2>
-          <p>
-            Coronavirus disease spreads primarily through contact with an infected person when they cough or sneeze. It also spreads when a person touches a surface or object that has the virus on it, then touches their eyes, nose, or mouth.
-          </p>
-          <h2> Prevention</h2>
-          <p>
-            There’s currently no vaccine to prevent coronavirus disease (COVID-19). <br />
-            You can protect yourself and help prevent spreading the virus to others if you: <br />
-            Do: <br />
-            <ul>
-              <li>Wash your hands regularly for 20 seconds, with soap and water or alcohol-based hand rub</li>
-              <li>Cover your nose and mouth with a disposable tissue or flexed elbow when you cough or sneeze</li>
-              <li>Avoid close contact (1 meter or 3 feet) with people who are unwell</li>
-              <li>Stay home and self-isolate from others in the household if you feel unwell</li>
-            </ul>
-            Don't <br />
-            <ul>
-              <li>Touch your eyes, nose, or mouth if your hands are not clean</li>
-            </ul>
-          </p>
+            <div className="row">
+              <div className="col-md-12">
+                <MapChart setTooltipContent={this.setTooltipContent} />
+                <ReactTooltip>{this.state.content}</ReactTooltip>
+              </div>
+            </div>
           </div>
           <div className="d-flex justify-content-center">
             <div className="card col-md-4">

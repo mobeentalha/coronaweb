@@ -27,6 +27,16 @@ class Countries extends Component {
   handleChange(event) {
     this.setState({ value: event.target.value });
   }
+  sortByAsc= () =>{
+    this.setState(prevState => {
+      this.state.newList.sort((a,b) => a.confirmedValue - b.confirmedValue)
+    })
+  }
+  sortByDesc= () =>{
+    this.setState(prevState => {
+      this.state.newList.sort((a,b) => b.confirmedValue - a.confirmedValue)
+    })
+  }
   handleSubmit(event) {
     let searchResult = []
     if (this.state.value === "") {
@@ -35,11 +45,9 @@ class Countries extends Component {
         this.setState({ hide: true });
       }, 4000);
     } else {
-      console.log("Value Enter : ", this.state.value);
       axios
         .get(`https://covid19.mathdro.id/api/countries/` + this.state.value)
         .then((res) => {
-          console.log("Result : ", res.data);
           const result = {
             name: this.state.value,
             confirmedValue: res.data.confirmed.value,
@@ -95,10 +103,8 @@ class Countries extends Component {
     return +(Math.round(num + "e+2") + "e-2");
   }
   render() {
-    console.log("Search Result : ", this.state.searchResult);
-    console.log("TEMP Result : ", this.state.tempData);
 
-    let newData = this.state.newList
+    let newData = this.state.newList;
     return (
       <section>
         <div className="row mar">
@@ -124,6 +130,20 @@ class Countries extends Component {
             onClick={this.getAllData}
           >
             ALL DATA
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary btn-xs"
+            onClick={this.sortByAsc}
+          >
+            Ascending 
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary btn-xs"
+            onClick={this.sortByDesc}
+          >
+            Descending
           </button>
           {this.state.error === "" ? (
             ""
