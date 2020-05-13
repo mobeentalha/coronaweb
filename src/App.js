@@ -13,6 +13,8 @@ class App extends Component {
     confirmedCases: "",
     recoveredCases: "",
     deaths: "",
+    activeCase: "",
+    todayCase: "",
     countriesList: [],
     recoveredRate: "",
     deathRate: "",
@@ -23,24 +25,29 @@ class App extends Component {
   this.setTooltipContent = this.setTooltipContent.bind(this);
 }
   componentDidMount() {
-    axios.get(`https://covid19.mathdro.id/api/countries`).then((res) => {
-      const cID = res.data.countries;
-      this.setState({ countriesList: cID });
-      this.setState({ loading: false });
+    axios.get(`https://coronavirus-19-api.herokuapp.com/countries`).then((res) => {
+      
+      const length = res.data.length;
+      var i = 1;
+      const list= [];
+      for(i = 1; i< length; i++){
+        const cID = res.data[i];
+        list.push(cID.country)
+      }
+      this.setState({ countriesList: list });
+      this.setState({ loading: false })
+      // const cID = res.data;
+      // this.setState({ countriesList: cID });
+      // this.setState({ loading: false });
     });
 
-    axios.get(`https://covid19.mathdro.id/api`).then((res) => {
-      this.setState({ confirmedCases: res.data.confirmed });
-      this.setState({ recoveredCases: res.data.recovered });
-      this.setState({ deaths: res.data.deaths });
-      const recoveredRate = this.roundValue(
-        (res.data.recovered.value / res.data.confirmed.value) * 100
-      );
-      const deathRate = this.roundValue(
-        (res.data.deaths.value / res.data.confirmed.value) * 100
-      );
-      this.setState({ recoveredRate: recoveredRate });
-      this.setState({ deathRate: deathRate });
+    axios.get(`https://coronavirus-19-api.herokuapp.com/countries`).then((res) => {
+      const data = res.data[0];
+      this.setState({ confirmedCases: data.cases });
+      this.setState({ recoveredCases: data.recovered});
+      this.setState({ deaths: data.deaths });
+      this.setState({ activeCase: data.active})
+      this.setState({ todayCase: data.todayCases})
     });
   }
   roundValue(num) {
@@ -78,7 +85,7 @@ class App extends Component {
                   <span className="bold-text">
                     {this.state.confirmedCases === ""
                       ? ""
-                      : this.state.confirmedCases.value}
+                      : this.state.confirmedCases}
                   </span>
                 </h5>
                 <h5 className="card-text">
@@ -86,28 +93,27 @@ class App extends Component {
                   <span className="bold-text">
                     {this.state.recoveredCases === ""
                       ? ""
-                      : this.state.recoveredCases.value}
+                      : this.state.recoveredCases}
                   </span>
                 </h5>
                 <h5 className="card-text">
                   Total Deaths :
                   <span className="bold-text">
-                    {this.state.deaths === "" ? "" : this.state.deaths.value}
+                    {this.state.deaths === "" ? "" : this.state.deaths}
                   </span>
                 </h5>
                 <h6 className="card-text">
-                  Recovered Rate:
+                  Active Case:
                   <span className="bold-text">
-                    {this.state.recoveredRate === ""
+                    {this.state.activeCase === ""
                       ? ""
-                      : this.state.recoveredRate}{" "}
-                    %
+                      : this.state.activeCase}{" "}
                   </span>
                 </h6>
                 <h6 className="card-text">
-                  Death Rate:
+                  Today Case:
                   <span className="bold-text">
-                    {this.state.deathRate === "" ? "" : this.state.deathRate} %
+                    {this.state.todayCase === "" ? "" : this.state.todayCase}
                   </span>
                 </h6>
               </div>

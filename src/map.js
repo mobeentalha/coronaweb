@@ -21,11 +21,11 @@ const MapChart = props => {
                   key={geo.rsmKey}
                   geography={geo}
                   onMouseEnter={() => {
-                    const { NAME, ISO_A2 } = geo.properties;
+                    const { NAME} = geo.properties;
                     axios
-                    .get(`https://covid19.mathdro.id/api/countries/` + ISO_A2)
+                    .get(`https://coronavirus-19-api.herokuapp.com/countries/` + NAME)
                     .then((res) => {
-                        props.setTooltipContent(`${NAME} — Confirmed Cases : ${res.data.confirmed.value}`);
+                        props.setTooltipContent(`${NAME} — Confirmed Cases : ${res.data.cases}`);
                     })
                     // props.setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
                   }}

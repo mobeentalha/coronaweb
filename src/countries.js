@@ -46,19 +46,15 @@ class Countries extends Component {
       }, 4000);
     } else {
       axios
-        .get(`https://covid19.mathdro.id/api/countries/` + this.state.value)
+        .get(`https://coronavirus-19-api.herokuapp.com/countries/` + this.state.value)
         .then((res) => {
           const result = {
             name: this.state.value,
-            confirmedValue: res.data.confirmed.value,
-            recoveredValue: res.data.recovered.value,
-            deathValue: res.data.deaths.value,
-            recorveredRate: this.roundValue(
-              (res.data.recovered.value / res.data.confirmed.value) * 100
-            ),
-            deathRate: this.roundValue(
-              (res.data.deaths.value / res.data.confirmed.value) * 100
-            ),
+            confirmedValue: res.data.cases,
+            recoveredValue: res.data.recovered,
+            deathValue: res.data.deaths,
+            active: res.data.active,
+            todayCases: res.data.todayCases,
           };
           searchResult = [...searchResult, result]
           this.setState({ newList: searchResult });
@@ -71,19 +67,15 @@ class Countries extends Component {
     const lastIndex = list.length - 1;
     list.map((item, i) => {
       axios
-        .get(`https://covid19.mathdro.id/api/countries/` + item.name)
+        .get(`https://coronavirus-19-api.herokuapp.com/countries/` + item)
         .then((res) => {
           const object = {
-            name: item.name,
-            confirmedValue: res.data.confirmed.value,
-            recoveredValue: res.data.recovered.value,
-            deathValue: res.data.deaths.value,
-            recorveredRate: this.roundValue(
-              (res.data.recovered.value / res.data.confirmed.value) * 100
-            ),
-            deathRate: this.roundValue(
-              (res.data.deaths.value / res.data.confirmed.value) * 100
-            ),
+            name: item,
+            confirmedValue: res.data.cases,
+            recoveredValue: res.data.recovered,
+            deathValue: res.data.deaths,
+            active: res.data.active,
+            todayCases: res.data.todayCases,
           };
           this.stateSetting(object);
           if (i === lastIndex) {
@@ -179,11 +171,11 @@ class Countries extends Component {
                       <h5 className="card-text"> Deaths : {item.deathValue}</h5>
                       <h6 className="card-text">
                         {" "}
-                        Recovered Rate : {item.recorveredRate} %
+                        Active Cases : {item.active}
                       </h6>
                       <h6 className="card-text">
                         {" "}
-                        Death Rate : {item.deathRate} %
+                        Today Cases : {item.todayCases}
                       </h6>
                     </div>
                   </div>
